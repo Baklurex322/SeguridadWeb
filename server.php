@@ -14,13 +14,13 @@ if ($conn->connect_error) {
 }
 
 // Obtener datos del formulario
-$nombre = $_POST['nombre'];
+$usuario = $_POST['usuario'];
 $contraseña = password_hash($_POST['contraseña'], PASSWORD_DEFAULT); // Encriptar contraseña
 
 // Insertar en la tabla
-$sql = "INSERT INTO usuarios (nombre, contraseña) VALUES (?, ?)";
+$sql = "INSERT INTO usuarios (usuario, contraseña) VALUES (?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $nombre, $contraseña);
+$stmt->bind_param("ss", $usuario, $contraseña);
 
 if ($stmt->execute()) {
     echo "Usuario registrado con éxito.";
