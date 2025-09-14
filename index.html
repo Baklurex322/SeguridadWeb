@@ -5,11 +5,33 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h2>Login</h2>
-    <form action="server.php" method="post">
-        <input type="text" name="usuario" placeholder="Usuario" required />
-        <input type="password" name="contraseña" placeholder="contrasena" required />
-        <button type="submit">Ingresar</button>
+<div class="form-container">
+    <form id="myForm" novalidate>
+      <label for="name">Nombre:</label>
+      <input type="text" id="name" name="name" required minlength="3" placeholder="Tu nombre" />
+
+      <label for="email">Correo electrónico:</label>
+      <input type="email" id="email" name="email" required placeholder="ejemplo@correo.com" />
+
+      <label for="age">Edad:</label>
+      <input type="number" id="age" name="age" min="1" max="120" required placeholder="Tu edad" />
+
+      <label for="message">Mensaje:</label>
+      <textarea id="message" name="message" required minlength="10" placeholder="Escribe tu mensaje aquí"></textarea>
+
+      <button type="submit">Enviar</button>
     </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('myForm');
+
+    form.addEventListener('submit', function(event) {
+      if (!form.checkValidity()) {
+        event.preventDefault(); // Evita envío si hay errores
+        alert('Por favor, rellena correctamente todos los campos.');
+      }
+    });
+  </script>
 </body>
 </html>
