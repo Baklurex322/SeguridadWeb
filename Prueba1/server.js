@@ -16,10 +16,10 @@ app.get('/', (req, res) => {
 
 // Configura conexión a MySQL (usa variables de entorno en Railway)
 const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'tu_usuario',
-  password: process.env.DB_PASSWORD || 'tu_contrasena',
-  database: process.env.DB_NAME || 'tu_base_de_datos'
+  host: process.env.DB_HOST || 'mysql.railway.internal',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || 'tdKvmYLHbAufkdACcurTFfrjwutHsPpM',
+  database: process.env.DB_NAME || 'railway'
 };
 
 // Ruta POST para registrar usuario
