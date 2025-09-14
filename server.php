@@ -1,33 +1,25 @@
+
 <?php
+// Conexión a PostgreSQL
+$conn = pg_connect("host=ep-frosty-salad-aewchf1i-pooler.c-2.us-east-2.aws.neon.tech dbname=neondb user=neondb_owner password=npg_UaAxJ2RwXHK1");
 
-// Conexión a la base de datos
-$host = "ep-frosty-salad-aewchf1i-pooler.c-2.us-east-2.aws.neon.tech";
-$db = "neondb";
-$user = "neondb_owner";
-$pass = "npg_UaAxJ2RwXHK1";
-
-$conn = new mysqli($host, $user, $pass, $db);
-
-// Verifica conexión
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
+if (!$conn) {
+    die("Error de conexión: " . pg_last_error());
 }
 
-// Obtener datos del formulario
+// Obtener y sanitizar datos del formulario
 $usuario = $_POST['usuario'];
 $contraseña = password_hash($_POST['contraseña'], PASSWORD_DEFAULT); // Encriptar contraseña
 
-// Insertar en la tabla
-$sql = "INSERT INTO usuarios (usuario, contraseña) VALUES (?, ?)";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $usuario, $contraseña);
+// Preparar consulta SQL
+$sql = "INSERT INTO usuarios (usuario, contraseña) VALUES ($1, $2)";
+$result = pg_query_params($conn, $sql, array($usuario, $contraseña));
 
-if ($stmt->execute()) {
+if ($result) {
     echo "Usuario registrado con éxito.";
 } else {
-    echo "Error: " . $stmt->error;
+    echo "Error al registrar: " . pg_last_error($conn);
 }
 
-$stmt->close();
-$conn->close();
+pg_close($conn);
 ?>
