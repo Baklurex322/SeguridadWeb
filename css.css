@@ -4,7 +4,7 @@ html{
 
 .form-container{
     width: 80vw; /* 80% del ancho de la ventana */
-      height: 80vh; /* 80% del alto de la ventana */
+      height: auto; /* 80% del alto de la ventana */
       object-fit: cover; /* Para que el video cubra bien el área */
       box-sizing: border-box;
       justify-self: anchor-center;
@@ -44,4 +44,5 @@ button{
     margin-left: 25%;
     background-color: beige;
     border-style: none;
+
 }
