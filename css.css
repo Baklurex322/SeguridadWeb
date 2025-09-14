@@ -1,0 +1,47 @@
+html{
+    background-color: azure;
+}
+
+.form-container{
+    width: 80vw; /* 80% del ancho de la ventana */
+      height: 80vh; /* 80% del alto de la ventana */
+      object-fit: cover; /* Para que el video cubra bien el área */
+      box-sizing: border-box;
+      justify-self: anchor-center;
+      margin-top: 10vh;
+      
+}
+form{
+    background-color: cadetblue;
+    border-style: solid;
+    border-width: 10px;
+    border-color: antiquewhite;
+    border-radius: 50px;
+    height: 100%;
+    
+}
+
+.cont{
+    width: 70%;
+margin: 50px 15%;
+}
+
+label{
+    font-family: sans-serif;
+    color: aliceblue;
+    font-size: 1.3rem;
+    font-weight: 100;
+    width: 100%;
+    float: left;
+}
+input, textarea{
+    width: 60%;
+    height: 50px;
+}
+button{
+    width: 50%;
+    height: 50px;
+    margin-left: 25%;
+    background-color: beige;
+    border-style: none;
+}
