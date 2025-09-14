@@ -2,23 +2,45 @@
 <html>
 <head>
     <title>Login</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css.css">
 </head>
 <body>
 <div class="form-container">
     <form id="myForm" novalidate>
-      <label for="name">Nombre:</label>
-      <input type="text" id="name" name="name" required minlength="3" placeholder="Tu nombre" />
+      <div class="cont">
+        <label for="name">Nombre:</label>
+      <input type="text" id="name" name="name" required minlength="3" maxlength="30" placeholder="Tu nombre" />
 
-      <label for="email">Correo electrónico:</label>
-      <input type="email" id="email" name="email" required placeholder="ejemplo@correo.com" />
+      </div>
 
-      <label for="age">Edad:</label>
-      <input type="number" id="age" name="age" min="1" max="120" required placeholder="Tu edad" />
+      <div class="cont">
+        <label for="email">Correo electrónico:</label>
+      <input type="email" id="email" name="email" required minlength="10" required maxlength="30" placeholder="ejemplo@correo.com" />
 
-      <label for="message">Mensaje:</label>
-      <textarea id="message" name="message" required minlength="10" placeholder="Escribe tu mensaje aquí"></textarea>
+      </div>
 
+      <div class="cont">
+        <label for="age">Edad:</label>
+      <input type="text" id="edad" name="edad" maxlength="2" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+
+      </div>
+     
+      <div class="cont">
+         <label for="message">Mensaje: (100 letras)</label>
+      <textarea id="message" name="message" required minlength="5" maxlength="100" placeholder="Escribe tu mensaje aquí"></textarea>
+<div class="contador" style="color: aliceblue;">
+    Caracteres: <span id="contador" style="color: aliceblue;">100</span>
+  </div>
+
+  <script>
+    const textarea = document.getElementById('message');
+    const contador = document.getElementById('contador');
+
+    textarea.addEventListener('input', () => {
+      contador.textContent = 100-textarea.value.length;
+    });
+  </script>
+      </div>
       <button type="submit">Enviar</button>
     </form>
   </div>
