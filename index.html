@@ -5,17 +5,19 @@
     <link rel="stylesheet" href="css.css">
 </head>
 <body>
+  <script src="server.js"></script>
 <div class="form-container">
-    <form id="myForm" novalidate>
+    <form id="myForm" id="loginForm" novalidate>
+
       <div class="cont">
         <label for="name">Nombre:</label>
-      <input type="text" id="name" name="name" required minlength="3" maxlength="30" placeholder="Tu nombre" />
+      <input type="text" id="name" name="name" required minlength="3" maxlength="30"  pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+"  placeholder="Tu nombre" />
 
       </div>
 
       <div class="cont">
         <label for="email">Correo electrónico:</label>
-      <input type="email" id="email" name="email" required minlength="10" required maxlength="30" placeholder="ejemplo@correo.com" />
+      <input type="email" id="email" name="email" required minlength="10" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}$" required maxlength="30" placeholder="ejemplo@correo.com" />
 
       </div>
 
@@ -27,11 +29,36 @@
      
       <div class="cont">
          <label for="message">Mensaje: (100 letras)</label>
-      <textarea id="message" name="message" required minlength="5" maxlength="100" placeholder="Escribe tu mensaje aquí"></textarea>
+      <textarea id="message" name="message" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" required minlength="5" maxlength="100" placeholder="Escribe tu mensaje aquí"></textarea>
 <div class="contador" style="color: aliceblue;">
     Caracteres: <span id="contador" style="color: aliceblue;">100</span>
   </div>
+      </div>
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+<script>
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const correo = document.getElementById("correo").value;
+  const password = document.getElementById("password").value;
 
+  const res = await fetch("/.netlify/functions/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ correo, password })
+  });
+
+  const data = await res.json();
+  if (data.success) {
+    // 🔑 acceso correcto → redirige
+    window.location.href = "/hola.html";
+  } else {
+    alert("Correo o contraseña incorrectos");
+  }
+});
+</script>
   <script>
     const textarea = document.getElementById('message');
     const contador = document.getElementById('contador');
@@ -40,11 +67,6 @@
       contador.textContent = 100-textarea.value.length;
     });
   </script>
-      </div>
-      <button type="submit">Enviar</button>
-    </form>
-  </div>
-
   <script>
     const form = document.getElementById('myForm');
 
