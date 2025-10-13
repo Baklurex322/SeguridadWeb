@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cifrado</title>
+
+  <link rel="stylesheet" href="csscifrado.css">
+</head>
+<body>
+  <table border="1" cellspacing="10" cellpadding="10">
+  <tr>
+    <!-- ==================== AES ==================== -->
+    <td valign="top">
+      <h3>AES - Cifrar y Descifrar</h3>
+      <textarea id="mensajeAES" rows="3" cols="40" placeholder="Escribe tu mensaje..."></textarea><br>
+      <button onclick="cifrarAES()">Cifrar</button>
+      <button onclick="descifrarAES()">Descifrar</button><br>
+      <textarea class="Cifrado" readonly rows="10" cols="40" id="resultadoAES"></textarea>
+
+    </td>
+
+    <!-- ==================== Generar RSA ==================== -->
+    <td valign="top">
+      <h3>Generar Claves RSA</h3>
+      <p>Clave Publica</p>
+      <textarea class="Cifrado" readonly id="resultadoRSA" rows="3" cols="40"></textarea><br>
+      <p>Clave Privada</p>
+      <textarea class="Cifrado" readonly id="resultadoRSA2" rows="3" cols="40"></textarea><br>
+      <button onclick="generarRSA()">Generar</button>
+      
+    </td>
+  </tr>
+
+  <tr>
+    <!-- ==================== Cifrar RSA ==================== -->
+    <td valign="top">
+      <h3>Cifrar con RSA</h3>
+      <textarea id="pubRSA" rows="4" cols="50" placeholder="Pega la clave pública..."></textarea><br>
+      <textarea id="mensajeRSA" rows="3" cols="50" placeholder="Mensaje o clave AES..."></textarea><br>
+      <button onclick="cifrarRSA()">Cifrar</button><br>
+      <p>Texto cifrado</p>
+      <textarea class="Cifrado" readonly rows="3" cols="40" id="resultadoCifradoRSA"></textarea>
+    </td>
+
+    <!-- ==================== Descifrar RSA ==================== -->
+    <td valign="top">
+      <h3>Descifrar con RSA</h3>
+      <textarea id="privRSA" rows="4" cols="50" placeholder="Pega la clave privada..."></textarea><br>
+      <textarea id="textoRSA" rows="3" cols="50" placeholder="Texto cifrado..."></textarea><br>
+      <button onclick="descifrarRSA()">Descifrar</button>
+      <pre id="resultadoDescifradoRSA"></pre>
+    </td>
+  </tr>
+</table>
+
+<!-- ===================================================== -->
+<!-- ==================== SCRIPT GLOBAL ================== -->
+<!-- ===================================================== -->
+<script>
+/* === Funciones auxiliares (compartidas) === */
+const toBase64 = b => btoa(String.fromCharCode(...new Uint8Array(b)));
+const fromBase64 = b64 => Uint8Array.from(atob(b64), c => c.charCodeAt(0)).buffer;
+const enc = s => new TextEncoder().encode(s);
+const dec = b => new TextDecoder().decode(b);
+
+/* ====================AES==================== */
+let claveAES, ivAES, cifradoAES;
+
+async function cifrarAES() {
+  const mensaje = document.getElementById("mensajeAES").value || "Mensaje secreto";
+  claveAES = await crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, true, ["encrypt","decrypt"]);
+  ivAES = crypto.getRandomValues(new Uint8Array(12));
+  cifradoAES = await crypto.subtle.encrypt({ name: "AES-GCM", iv: ivAES }, claveAES, enc(mensaje));
+  document.getElementById("resultadoAES").textContent = "Cifrado (Base64):\n" + toBase64(cifradoAES);
+}
+
+async function descifrarAES() {
+  if (!cifradoAES || !claveAES) return alert("Primero cifra un mensaje.");
+  const descifrado = await crypto.subtle.decrypt({ name: "AES-GCM", iv: ivAES }, claveAES, cifradoAES);
+  document.getElementById("resultadoAES").textContent += "\nDescifrado:\n" + dec(descifrado);
+}
+
+/* ====================  Generar RSA ==================== */
+async function generarRSA() {
+  const claves = await crypto.subtle.generateKey(
+    { name: "RSA-OAEP", modulusLength: 2048, publicExponent: new Uint8Array([1,0,1]), hash: "SHA-256" },
+    true,
+    ["encrypt","decrypt"]
+  );
+  const pub = await crypto.subtle.exportKey("spki", claves.publicKey);
+  const priv = await crypto.subtle.exportKey("pkcs8", claves.privateKey);
+  document.getElementById("resultadoRSA").textContent =
+  toBase64(pub) + "\n\n";
+    document.getElementById("resultadoRSA2").textContent =
+  toBase64(priv);
+}
+
+/* ====================Cifrar RSA ==================== */
+async function cifrarRSA() {
+  const pubKeyBase64 = document.getElementById("pubRSA").value.trim();
+  const mensaje = document.getElementById("mensajeRSA").value;
+  if (!pubKeyBase64 || !mensaje) return alert("Faltan datos.");
+
+  const pubKey = await crypto.subtle.importKey(
+    "spki",
+    fromBase64(pubKeyBase64),
+    { name: "RSA-OAEP", hash: "SHA-256" },
+    false,
+    ["encrypt"]
+  );
+
+  const cifrado = await crypto.subtle.encrypt({ name: "RSA-OAEP" }, pubKey, enc(mensaje));
+  document.getElementById("resultadoCifradoRSA").textContent = toBase64(cifrado);
+}
+
+/* ==================== Descifrar RSA ==================== */
+async function descifrarRSA() {
+  const privKeyBase64 = document.getElementById("privRSA").value.trim();
+  const textoBase64 = document.getElementById("textoRSA").value.trim();
+  if (!privKeyBase64 || !textoBase64) return alert("Faltan datos.");
+
+  const privKey = await crypto.subtle.importKey(
+    "pkcs8",
+    fromBase64(privKeyBase64),
+    { name: "RSA-OAEP", hash: "SHA-256" },
+    false,
+    ["decrypt"]
+  );
+
+  const cifrado = fromBase64(textoBase64);
+  const descifrado = await crypto.subtle.decrypt({ name: "RSA-OAEP" }, privKey, cifrado);
+
+  document.getElementById("resultadoDescifradoRSA").textContent = "Texto descifrado:\n" + dec(descifrado);
+}
+</script>
+</body>
+</html>

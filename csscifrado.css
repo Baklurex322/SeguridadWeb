@@ -1,0 +1,30 @@
+html{
+    background-color: rgb(204, 147, 222);
+}
+h3{
+    color: rgb(0, 0, 0);
+    font-family: 'Arial Narrow Bold', sans-serif;
+}
+table{
+    justify-self: center;
+    border-color: aliceblue;
+    border-style: groove;
+    background-color: rgb(211, 173, 223);
+}
+tr{
+    background-color:rgb(234, 211, 241);
+}
+button{
+    background-color: rgb(160, 93, 223);
+    border-color: aliceblue;
+    color: aliceblue;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bolder;
+}
+textarea{
+    resize: none;
+}
+.Cifrado{
+background-color:rgb(234, 211, 241);
+border-style: none;
+}
