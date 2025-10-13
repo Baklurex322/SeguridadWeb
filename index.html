@@ -37,7 +37,7 @@
     <td valign="top">
       <h3>Cifrar con RSA</h3>
       <textarea id="pubRSA" rows="4" cols="50" placeholder="Pega la clave pública..."></textarea><br>
-      <textarea id="mensajeRSA" rows="3" cols="50" placeholder="Mensaje o clave AES..."></textarea><br>
+      <textarea id="mensajeRSA" rows="3" cols="50" placeholder="Mensaje..."></textarea><br>
       <button onclick="cifrarRSA()">Cifrar</button><br>
       <p>Texto cifrado</p>
       <textarea class="Cifrado" readonly rows="3" cols="40" id="resultadoCifradoRSA"></textarea>
@@ -47,7 +47,7 @@
     <td valign="top">
       <h3>Descifrar con RSA</h3>
       <textarea id="privRSA" rows="4" cols="50" placeholder="Pega la clave privada..."></textarea><br>
-      <textarea id="textoRSA" rows="3" cols="50" placeholder="Texto cifrado..."></textarea><br>
+      <textarea id="textoRSA" rows="3" cols="50" placeholder="Texto cifrado de RSA..."></textarea><br>
       <button onclick="descifrarRSA()">Descifrar</button>
       <pre id="resultadoDescifradoRSA"></pre>
     </td>
@@ -135,4 +135,5 @@ async function descifrarRSA() {
 }
 </script>
 </body>
+
 </html>
